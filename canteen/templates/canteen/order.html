@@ -1,0 +1,138 @@
+{% extends "canteen/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<script type="text/javascript" src="{% static 'canteen/ordertime.js' %}"> </script>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="box-element">
+
+      {% if message != None %}
+      <div class=" p-2  bg-warning text-white"> {{message}}</div>
+      {% endif %}
+      <div>
+        <!--<h1> Order Detail </h1>-->
+        <!--<div class="p-2 ml-2 bg-primary text-white"> Oder Detail </div>-->
+        <div class="t-1 p-2 ml-2 bg-primary text-white"> Order# : {{order.transaction_id}} </div>
+        <div class="d-inline p-2 ml-2 bg-primary text-white"> Status   : {{order.status}} </div>
+
+        {%if order.status == 'Confirmed' or order.status == 'Edit Requested' or order.status == 'Cancel Requested' %}
+          <div class="m-2 bg-info text-white"> <span id='showtime'></span></div>
+          <script>
+            console.log('Oder ID : ' + '{{order.id}}')
+            var msg = '{{order.status}}';
+            console.log(msg);
+            var odt = '{{order.datetime}}';
+            console.log('Order Date and Time: ' + odt);
+            var cdt = '{{order.confirmdatetime}}';
+            console.log('Order Confirm Date and Time: ' + cdt);
+
+            var tlps = '{{ order.get_order_time_lapsed }}'
+            console.log('time lapsed : ' + tlps);
+            var jsdatetime = new Date();
+            console.log('Jave Script Date and Time: ' + jsdatetime);
+            var secleft = 180 - tlps
+            console.log('seconds left : ' + secleft)
+            displayTime(secleft);
+          </script>
+        {% endif %}
+
+        {%if order.status == 'Open' or order.status == 'New' %}
+        <div>
+          <br>
+          <a class="btn btn-outline-dark" href="{% url 'canteen-menu' %}">&#x2190; Continue Ordering</a>
+        </div>
+        {% endif %}
+      </div>
+
+      <br>
+      <br>
+      <table class="table">
+        <tr>
+          <th>
+            <h5>Items: <strong>{{order.get_order_items_total}}</strong></h5>
+          </th>
+          <th>
+            <h5>Total:<strong> Rs {{order.get_order_total}}</strong></h5>
+          </th>
+          <th>
+
+            {% if order.status == "Open" %}
+              <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'confrimorder' order.id %}">Confirm Order</a>
+            {% elif order.status == 'Confirmed' %}
+              <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'cancelorder' order.id %}">Cancel Order</a>
+              <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'editorder' order.id %}">Edit
+              Order</a>
+            {% elif order.status == 'Cooked' %}
+              <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'requestbill' order.id %}">Request Bill</a>
+            {% elif order.status == 'Bill Requested' %}
+            <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'makepayment' order.id %}">Make Payment</a>
+            {% elif order.status == 'Canceled' or order.status == 'Payment Made' or order.status == 'Bill Paid' %}
+            <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'feedback' order.id %}">Give Feedback</a>
+            {%endif%}
+          </th>
+        </tr>
+      </table>
+
+    </div>
+
+    <br>
+    <div class="box-element">
+      <div class="cart-row">
+        <div style="flex:1"></div>
+        <div style="flex:2"><strong>Item</strong></div>
+        <div style="flex:1"></div>
+        <div style="flex:2"><strong>Price</strong></div>
+        <div style="flex:2"><strong>Disc.%</strong></div>
+        <div style="flex:2"><strong>Quantity</strong></div>
+        <div style="flex:2"><strong>Total</strong></div>
+
+      </div>
+      {% for item in items %}
+      <div class="cart-row">
+        <div style="flex:1"><img class="row-image" src="{{item.dish.imageURL}}"></div>
+        <div style="flex:2">
+          <p>{{item.dish.title}}</p>
+        </div>
+        <div style="flex:2">
+          <p>Rs {{item.price}}</p>
+        </div>
+        <div style="flex:1">
+          {% if item.discountPercent > 0 %}
+            <p> {{item.discountPercent}}</p>
+          {% endif %}
+        </div>
+        <div style="flex:2">
+          <p class="quantity">{{item.quantity}}</p>
+          {%if order.status == 'Open' %}
+          <div class="quantity">
+            <form action="{% url 'moreorderitem' item.id%}" method="POST" class="d-sm-inline">
+              {%csrf_token%}
+              <input type="submit" value="&#10133;">
+            </form>
+            <form action="{% url 'lessorderitem' item.id%}" method="POST" class="d-sm-inline">
+              {%csrf_token%}
+              <input type="submit" value="&#10134;">
+            </form>
+          </div>
+          {% endif %}
+        </div>
+        <div style="flex:1">
+          <p>Rs {{item.get_total}}</p>
+        </div>
+        <div class="quantity">
+          {%if order.status == 'Open' %}
+          <form action="{% url 'delorderitem' item.id%}" method="POST" class="d-sm-inline">
+            {%csrf_token%}
+            <input type="submit" class="btn" value="&#10060;">
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

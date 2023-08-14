@@ -1,0 +1,52 @@
+{% extends "canteen/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="box-element">
+      <div>
+        <div class="t-1 p-2 ml-2 bg-primary text-white"> Order# : {{order.transaction_id}} </div>
+      </div>
+
+      <br>
+      <table class="table">
+        <tr>
+          <th>
+            <h5>Total Bill:<strong> Rs {{order.get_order_total}}</strong></h5>
+          </th>
+          <th>
+            <h5>Items: <strong>{{order.get_order_items_total}}</strong></h5>
+          </th>
+        </tr>
+        <tr>
+          <th>
+          <form method="POST" enctype="multipart/form-data" action="{% url 'paymentmade' order.id %}">
+            {% csrf_token %}
+            <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Pay Bill</legend>
+              <input type="radio" id="visa" name="option" value="visa">
+              <label for="visa">Visa Card</label><br>
+              <input type="radio" id="master" name="option" value="master">
+              <label for="master">Master Card</label><br>
+              <input type="radio" id="cash" name="option" value="cash">
+              <label for="other">Cash</label>
+            </fieldset>
+            <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Make Payment</button>
+              <small class="text-muted">
+                <a class="ml-2" href="{% url 'canteen-order' %}">View Order</a>
+              </small>
+            </div>
+          </form>
+
+
+        
+      </table>
+
+    </div>
+    </div>
+    </div>
+
+{% endblock content %}

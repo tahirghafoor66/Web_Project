@@ -1,0 +1,33 @@
+{% extends "canteen/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="box-element">
+      
+
+     
+      <table class="table">
+        <tr>
+          <th>
+            <h3> Thanks <strong>  {{user.first_name}}</strong> for Visting us</h3>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <h5> Your feedback will help us to serve you better</h5>
+          </th>
+          <th>
+              <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'feedback' order.id %}">Give Feedback</a>
+          </th>
+        </tr>
+
+
+      </table>
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

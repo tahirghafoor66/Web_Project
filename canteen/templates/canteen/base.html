@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'canteen/main.css' %}"
+    />
+
+
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    
+    <style>
+    .sliderbox {
+      box-sizing: border-box;
+    }
+  
+    
+    .mySlides {
+      display: none;
+    }
+  
+ 
+    /* Slideshow container */
+    .slideshow-container {
+      max-width: 1000px;
+      position: relative;
+      margin: auto;
+    }
+  
+ 
+  
+    /* The dots/bullets/indicators */
+    .dot {
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.6s ease;
+    }
+  
+    .active {
+      background-color: #717171;
+    }
+  
+    /* Fading animation */
+    .fade {
+      -webkit-animation-name: fade;
+      -webkit-animation-duration: 5s;
+      animation-name: fade;
+      animation-duration: 2.5s;
+    }
+  
+    @-webkit-keyframes fade {
+      from {
+        opacity: .4
+      }
+  
+      to {
+        opacity: 1
+      }
+    }
+  
+    @keyframes fade {
+      from {
+        opacity: .4
+      }
+  
+      to {
+        opacity: 1
+      }
+    }
+  
+    /* On smaller screens, decrease text size */
+    @media only screen and (max-width: 300px) {
+      .slideshowtext {
+        font-size: 11px
+      }
+    }
+  </style>
+  
+
+
+      <title>Smart Canteen</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <div class="media">
+            <img
+              src="{% static 'canteen/canteen-icon.jpg' %}"
+              width="50" height="50"
+            />
+          </div>
+          <a class="navbar-brand ml-2 mr-4 " href="{% url 'canteen-home' %}" >  Smart Canteen</a>
+          {% if user.is_authenticated %}
+            <div class="navbar-brand ml-5 mr-2 " > 
+              <span>&#10024;</span>  {{user.first_name}}  <span>&#10024;</span>
+             </div>
+          {% endif %}
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto"></div>
+            
+            <div class="navbar-nav">
+              {% if user.is_authenticated %} 
+                  <div class="dropdown nav-item nav-link" >
+                    <button class="btn btn-primary dropdown-toggle" type="button"     data-toggle="dropdown">Services
+                    <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        {% if user.is_superuser  %}
+                          <li><a class="dropdown-item" href="{% url 'dish-create' %}">Add Dish</a></li>
+                          <li><a class="dropdown-item" href="{% url 'canteen-menu' %}">View Dishes</a></li>
+                          <li><a class="dropdown-item" href="{% url 'canteen-sales' 'Year' %}">View Sales</a></li>
+                          <li><a class="dropdown-item" href="{% url 'dishsales' %}">Dishes Sales</a></li>
+                        {% elif groupid == 2   %}
+                          <li><a class="dropdown-item" href="{% url 'pending-orders' %}">Pending Orders</a></li>
+                          <li><a class="dropdown-item" href="{% url 'change-orders' %}">Change Requests</a></li>
+                        {% elif groupid == 1 %}
+                          <li><a class="dropdown-item" href="{% url 'unpaid-orders' %}">Show Orders</a></li>
+                          <li><a class="dropdown-item" href="{% url 'tables' %}">Show Tables</a></li>
+                        {% else %}
+                          <li><a class="dropdown-item" href="{% url 'canteen-menu' %}">View Menu</a></li>
+                          <li><a class="dropdown-item" href="{% url 'canteen-order' %}">View Order</a></li>
+                        {% endif %}
+                      </ul>
+                  </div>
+              <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+              <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+              {% else %}
+                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main role="main" class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2" style="background-color: white;">
+        
+          
+          <h2 style="color:darkorange">Coming Soon</h2>
+          <ul class="list-inline-item" >
+             <h6 style="color: brown;">Chinese Food </h6>
+            <li ><img class="border border-primary" src="{% static 'canteen/ChineseDish1.jfif' %}"></li>
+            <li><img class="border border-primary" src="{% static 'canteen/ChineseDish2.jfif' %}"></li>
+            <li><img class="border border-primary" src="{% static 'canteen/ChineseDish3.jfif' %}"></li>
+          </ul>
+        </div>
+        <div class="col-sm-8" style="background-color: white; bottom: 1px;">
+          {% block content %}{% endblock %}
+
+
+
+        </div>
+        <div class="col-sm-2" style="background-color: white;">
+         <h2 style="color:darkorange; border:2px">Timings</h2>
+            <table>
+              <tr>
+                <th>
+                  <h6 style="color: darkorange ;  ">Breakfast</h6>
+                </th>
+                <th>
+                  <h6 style="color: rgb(77, 26, 219) ; padding: 4px;">6 AM - 10 AM</h6>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <h6 style="color: darkorange ;  ">Lunch</h6>
+                </th>
+                <th>
+                  <h6 style="color: rgb(77, 26, 219) ; padding: 4px;">12 PM - 4 PM</h6>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <h6 style="color: darkorange ;">Dinner</h6>
+                </th>
+                <th>
+                  <h6 style="color: rgb(77, 26, 219) ; padding: 4px;">6 PM - 12 AM</h6>
+                </th>
+              </tr>
+
+            </table>
+        </div>
+      </div>
+    </main>
+
+
+
+
+
+    <footer class="">
+    <style>
+      .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color:lightblue ;
+        color: white;
+        
+      }
+    </style>
+      <div class="footer">
+        <h5>&copy;Tahir Ghafoor <a  href="tahir.mydata@gmail.com">Send Email</a>
+        </h5>
+      </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <!-- <script type="text/javascript" src="{% static 'canteen/scripts.js' %}"></script> -->
+  </body>
+</html>

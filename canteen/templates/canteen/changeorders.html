@@ -1,0 +1,67 @@
+{% extends "canteen/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="box-element">
+      {% if message != None %}
+        <div class=" p-2  bg-warning text-white"> {{message}}</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="box-element">
+  <div class="cart-row">
+    <div style="flex:1"><strong>Action</strong></div>
+    <div style="flex:2"><strong>Order Number</strong></div>
+    <div style="flex:2"><strong>Confirm Date & Time</strong></div>
+    <div style="flex:2"><strong>Dish(es)</strong></div>
+    <div style="flex:1"><strong>Quantity</strong></div>
+  </div>
+</div>
+
+{% for order in orders %}
+
+  <div class="cart-row">
+    <div style="flex:1; ">
+      <a style="float:left; margin:1px; " class="btn btn-outline-dark" href="{% url 'allowchange' order.id %} ">
+        Allow</a>
+    </div>
+    <div style="flex:2">
+      <p>{{order.transaction_id}}</p>
+    </div>
+    <div style="flex:2">
+      <p> {{order.confirmdatetime}}</p>
+    </div>
+    <div style="flex:2">
+      <p style="color:red; font-weight: bold; "> {{order.status}}  </p>
+    </div>
+    <div style="flex:1">
+      <p> </p>
+    </div>
+    
+  </div>
+
+  
+    
+  {% for od in orderdetails %}
+    {% if order.transaction_id == od.order.transaction_id %}
+      <div class="cart-row">
+          <div style="flex:5">
+            <p></p>
+          </div>
+        <div style="flex:2">
+          <p style="color: blue;">{{od.dish.title}}</p>
+        </div>
+        <div style="flex:1">
+          <p style="color: blue; text-align: justify;"> {{od.quantity}}</p>
+        </div>
+      </div>
+    {% endif %}
+    {% endfor %}
+
+{% endfor %}
+{% endblock content %}

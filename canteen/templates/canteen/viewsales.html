@@ -1,0 +1,72 @@
+{% extends "canteen/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+      <table class="table">
+        <tr>
+          <th>
+            <a style="float:left; margin:5px;" class="btn btn-success" href="{% url 'canteen-sales' 'Year' %}">Year's Sale</a>
+          </th>
+          <th>
+            <a style="float:left; margin:5px;" class="btn btn-success" href="{% url 'canteen-sales' 'Month' %}">Month's Sale</a>
+          </th>
+          <th>
+            <a style="float:left; margin:5px;" class="btn btn-success" href="{% url 'canteen-sales' 'Day' %}">Today's Sale</a>
+          </th>
+        </tr>
+      </table>
+    </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="box-element">
+      {% if message != None %}
+        <div class=" p-2  bg-warning text-white"> 
+          {{message}} 
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          Printed on {{date}}
+        </div>
+        
+        
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="box-element">
+  <div class="cart-row">
+    <div style="flex:2"><strong>Date & Time</strong></div>
+    <div style="flex:2"><strong>Order Number [{{ordersCount}}] </strong></div>
+    <div style="flex:1"><strong>Items [{{totalItems}}]</strong></div>
+    <div style="flex:1"><strong>Amount [{{totalSale}}]</strong></div>
+  </div>
+</div>
+
+{% for order in orders %}
+
+  <div class="cart-row">
+    <div style="flex:2">
+      <p>{{order.datetime}}</p>
+    </div>
+    <div style="flex:2">
+      <a href="{% url 'vieworder' order.id %}">{{order.transaction_id}}</a>
+      <!--<p>{{order.transaction_id}}</p>-->
+    </div>
+    <div style="flex:1">
+      <p> {{order.get_order_items_total}}</p>
+    </div>
+    <div style="flex:1">
+      <p>Rs {{order.get_order_total}}  </p>
+    </div>
+  </div>
+
+  
+ 
+  
+{% endfor %}
+{% endblock content %}

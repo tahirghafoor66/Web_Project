@@ -1,0 +1,81 @@
+{% extends "canteen/base.html" %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-center">
+  <h1 style="color:crimson"> Welcome to Smart Canteen</h1>
+</div>
+<div class="d-flex justify-content-center">
+  <h4 style="color:blueviolet">Dining with ease</h4>
+</div>
+
+<div>
+  <div class="d-flex justify-content-center flex-row">
+    <div class="p-2 border border-primary bg-primary text-white">
+      No Waiter
+    </div>
+    <div class="p-2 border border-warning bg-warning text-white">
+      No Wait
+    </div>
+    <div class="p-2"></div>
+  </div>
+</div>
+
+<div>
+  <div class="d-flex justify-content-center flex-row">
+    <div class="p-2 border border-primary bg-primary text-white">
+      Place Order, Confirm Order , Change Order , Cancel Order and also Pay Bills Online.
+    </div>
+    <div class="p-2 border border-warning bg-warning text-white">
+      Order dishes with ease of few clicks, monitor time remaining to serve your order.
+    </div>
+    <div class="p-2"></div>
+  </div>
+</div>
+
+
+
+<div class="slideshow-container">
+
+  <div class="mySlides fade">
+    <img src="{% static 'canteen/restaurent pic1.jpg' %}" style="width: 980px; height: 300px;">
+  </div>
+  <div class="mySlides fade">
+    <img src="{% static 'canteen/restaurent pic2.jpg' %}" style="width: 980px; height: 300px;">
+  </div>
+  <div class="mySlides fade">
+    <img src="{% static 'canteen/restaurent pic3.jpg' %}" style="width: 980px; height: 300px;">
+  </div>
+  
+</div>
+<br>
+
+<div style="text-align:center">
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+</div>
+
+<script>
+  var slideIndex = 0;
+  showSlides();
+
+  function showSlides() {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    var dots = document.getElementsByClassName("dot");
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) { slideIndex = 1 }
+    for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex - 1].style.display = "block";
+    dots[slideIndex - 1].className += " active";
+    setTimeout(showSlides, 2000); // Change image every 2 seconds
+  }
+</script>
+
+
+{% endblock content %}

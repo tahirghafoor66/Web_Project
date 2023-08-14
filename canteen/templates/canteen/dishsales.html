@@ -1,0 +1,86 @@
+{% extends "canteen/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+  <div class="col-lg-12">
+      <table class="table">
+        <tr>
+          <th>
+            <form style="float:right; margin:5px;" action="{% url 'dishsales' %}" method="POST" class="d-sm-inline">
+              {%csrf_token%}
+              <label for="dish">Choose a Dish :</label>
+              <select id="dish" name="dish">
+                {% for dish in dishes %}
+                  <option value={{dish.id}}>{{dish.title}}</option>
+                {% endfor %}
+              </select>
+              <input type="submit" class="btn btn-outline-primary" value="View Sales">
+            </form>
+          </th>
+          <th>
+            <a style="float:left; margin:5px;" class="btn btn-outline-primary" href="{% url 'dishsales' %}">All Dishes Sale</a>
+          </th>
+        </tr>
+      </table>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="box-element">
+      {% if message != None %}
+        <div class=" p-2  bg-warning text-white"> 
+          {{message}} 
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          Printed on {{date}}
+        </div>
+        
+        
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="box-element">
+  <div class="cart-row">
+    <div style="flex:1"><strong>Order ID </strong></div>
+    <div style="flex:1"><strong>Dish Title </strong></div>
+    <div style="flex:1"><strong>Quantity [{{totalItems}}] </strong></div>
+    <div style="flex:1"><strong>Price </strong></div>
+    <div style="flex:1"><strong>Disc. % </strong></div>
+    <div style="flex:1"><strong>Amount [{{totalSale}}]</strong></div>
+  </div>
+</div>
+
+{% for dishOrder in dishesOrdered %}
+
+  <div class="cart-row">
+    <div style="flex:1">
+      <a  href="{% url 'vieworder' dishOrder.order.id %}">{{dishOrder.order.transaction_id}}</a>
+      
+    </div>
+    <div style="flex:1">
+      <p>{{dishOrder.dish.title}}</p>
+    </div>
+    <div style="flex:1">
+      <p>{{dishOrder.quantity}}</p>
+    </div>
+    <div style="flex:1">
+      <p>Rs. {{dishOrder.price}}</p>
+    </div>
+    <div style="flex:1">
+      <p> {{dishOrder.discountPercent}}%  </p>
+    </div>
+    <div style="flex:1">
+      <p>Rs. {{dishOrder.get_total}} </p>
+    </div>
+  </div>
+
+  
+ 
+  
+{% endfor %}
+{% endblock content %}

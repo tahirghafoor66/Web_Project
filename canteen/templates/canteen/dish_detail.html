@@ -1,0 +1,33 @@
+{% extends "canteen/base.html" %}
+{% block content %}
+<article class="media content-section">
+  <div class="media-body">
+    <img class="img-thumbnail account-img" src="{{ object.imageURL }}">
+    
+    <h1 class="article-title">{{ object.title }}</h1>
+    <div>
+      <p class="article-content"> Contents: {{ object.content }}</p>
+      <p class="article-content"> Serving: {{ object.serving }}</p>
+      {% if user.is_superuser %}
+      <p class="article-content"> On-Hand Qty: {{ object.onhandqty }}</p>
+      <p class="article-content"> Available: {{ object.available }}</p>
+      {% endif %}
+      <small class="text-muted"> Price: {{ object.price }}</small>
+    </div>
+
+    <div>
+      {% if user.is_superuser %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'dish-update' object.id %}">Update</a>
+      <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'dish-delete' object.id %}">Delete</a>
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'canteen-menu' %}">Back to List</a>
+      {% else %}
+        <a class="btn btn-outline-secondary" href="{% url 'canteen-menu' %}">Back to Menu</a>
+        <form action="{% url 'addorderitem' dish.id %}" method="POST" class="d-sm-inline">
+          {%csrf_token%}
+          <input type="submit" class="btn btn-outline-secondary" value="Add to Order">
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</article>
+{% endblock content %}

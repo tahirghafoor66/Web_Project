@@ -1,0 +1,40 @@
+{% extends "canteen/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section">
+  <form method="POST" enctype="multipart/form-data" action="{% url 'feedback' order.id %}" >
+    {% csrf_token %}
+    
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Please give your Feedback</legend>
+      {% for feedback in feedbacks %}
+       
+          <label style="color: chocolate; " for="Qestion">{{feedback.question.question}}</label><br>
+      
+          <input type="radio" id="{{forloop.counter}}" name="{{feedback.id}}" value="Excellent">
+          <label for="Excellent">Excellent</label>
+          <input type="radio" id="{{forloop.counter}}" name="{{feedback.id}}" value="Good">
+          <label for="Good">Good</label>
+          <input type="radio" id="{{forloop.counter}}" name="{{feedback.id}}" value="Normal">
+          <label for="Normal">Normal</label>
+          <input type="radio" id="{{forloop.counter}}" name="{{feedback.id}}" value="Average">
+          <label for="Average">Average</label>
+          <input type="radio" id="{{forloop.counter}}" name="{{feedback.id}}" value="Bad">
+          <label for="Bad">Bad</label>
+      
+          <br>
+          <br>
+       
+      {% endfor %}
+    </fieldset>
+    <div class="form-group">
+      <button class="btn btn-outline-info" type="submit">Submit</button>
+    </div>
+  </form>
+  <div class="border-top pt-3">
+    <small class="text-muted">
+      Go back to Order: <a class="ml-2" href="{% url 'canteen-order' %}">Order</a>
+    </small>
+  </div>
+</div>
+{% endblock content %}
