@@ -1,0 +1,45 @@
+Unzip the file MC180201471.RAR
+go to directory MC180201471
+run command ==> pip install django-crispy-forms==1.14.0
+run command ==> python -m pip install Pillow
+run command ==> pip install gunicorn
+
+
+run command ==> python manage.py runserver
+
+open URL 127.0.0.1:8000/ in browser
+
+Login with following credentials
+User: Admin
+Passwrod: scadmin123
+
+
+User: Haider
+Password: testpass123
+
+User: Mansoor
+Password: testpass123
+
+User: Cust1
+Password: testpass123
+
+User: Cust2
+Password: testpass234
+
+User: Cust3
+Password: testpass123
+
+
+
+
+
+Perfrom following actions
+New Dish
+go to Menu and select any dish, then delete it.
+
+
+User: Customer
+Password: testcust321
+
+Perfrom following actions
+go to Menu and select any dish to view details.

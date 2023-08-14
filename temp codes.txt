@@ -1,0 +1,210 @@
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+
+            </div>
+			
+<img class="rounded-circle account-img" src="{{ dish.imageURL }}">
+
+class="media-body"
+<div class="media-body" >
+
+
+<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'canteen-menu' %}">Back to List</a>
+<button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+
+
+
+<link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'canteen/main.css' %}"
+    />
+	
+<link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/main.css' %}"
+    />
+	
+data = cartData(request)
+
+cartItems = data['cartItems']
+order = data['order']
+items = data['items']
+
+context = {'items':items, 'order':order, 'cartItems':cartItems}
+return render(request, 'store/cart.html', context)
+
+
+complete = models.BooleanField(default=False)
+transaction_id = models.CharField(max_length=100, null=True)
+
+
+<img  class="chg-quantity"
+            src="{% static  'canteen/images/delete2.jpg' %}">
+			
+<input type="submit" class="btn" value="&#129145;">
+
+
+def updateOrderItem(request, id):
+    if request.method == 'POST':
+        customer = request.user.customer
+        dish = Dish.objects.get(pk=id)
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    orderItem, created = OrderDetail.objects.get_or_create(order=order, dish=dish)
+
+    if action == 'add':
+        orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+
+    orderItem.save()
+    if orderItem.quantity <= 0:
+        orderItem.delete()
+
+    return JsonResponse('Item was added', safe=False)
+
+path('add/<int:id>/', views.addOrderItem, name="addorderitem"),
+
+
+path('order/', views.confirmOrder, name='confrimorder'),
+
+<div class="d-sm-inline"> {{ message }} </div>
+
+
+
+timezone.now
+
+
+{% for od in orderdetails %}
+        
+        {{i}}
+        
+        {{od.order.transaction_id}}
+      {% endfor %}
+	  
+ {% for od in orderdetails %}
+        {% if order.transaction_id == od.order.transaction_id %}
+          {{od.order.transaction_id}}
+        {% endif %}
+      {% endfor %}
+	  
+<div class="box-element">
+        <div class="cart-row">
+          <div style="flex:2"><strong>Dish</strong></div>
+          <div style="flex:2"><strong>Quantity</strong></div>
+        </div>
+      </div>
+	  
+	  
+	  
+	  {% for od in orderdetails %}
+        {% if order.transaction_id == od.order.transaction_id %}
+          <div class="cart-row">
+            <div style="flex:2">
+              <p>{{od.dish.title}}</p>
+            </div>
+            <div style="flex:2">
+              <p> {{od.quantity}}</p>
+            </div>
+        {% endif %}
+      {% endfor %}
+	  
+	  
+	  
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+
+
+
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,
+                                   request.FILES,
+                                   instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your Profile has been updated !')
+            return redirect('profile')
+			
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Your Account has been created as {username}, Please Log In')
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'users/register.html', {'form': form})
+	
+
+open = models.BooleanField(default=True)
+    confirmed = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
+	
+
+@login_required
+def confirmOrder(request, id):
+    if request.user.is_authenticated:
+        order=Order.objects.get(id=id)
+        confirm=True
+        items = order.orderdetail_set.all()
+        for item in items and confirm:
+            if item.quantity >= item.dish.onhandqty and confirm:
+                item.dish.onhandqty -= item.quantity
+            else:
+                confirm=False
+
+        if confirm:
+            item.dish.save()
+            order.status='Confirmed'
+            order.confirmdatetime=timezone.now()
+            order.save()
+        else:
+            message="Order Quantaties are not available"    
+    else:
+        order = None
+
+    return HttpResponseRedirect('/order')
+	
+	
+<table>
+              <span>
+                <h6 style="color: rgb(77, 26, 219) ;">Breakfast : 6 AM - 10 AM</h6>
+              </span>
+              <span>
+                <h6 style="color: rgb(77, 26, 219) ;">    Lunch : 12 PM - 4 PM</h6>
+              </span>
+              <span>
+                <h6 style="color: rgb(77, 26, 219) ;">Dinner    : 6 PM - 12 AM</h6>
+              </span>
+            </table>
+
+{{dish.order.transaction_id}}
+
+<option value="volvo">Volvo XC90</option>
+                  <option value="saab">Saab 95</option>
+                  <option value="mercedes">Mercedes SLK</option>
+                  <option value="audi">Audi TT</option>
+
+feedback.answer = request.POST.get(f'{feedback.id}', 'No Answer')
+
+<a style="float:left; margin:5px;" class="btn btn-outline-primary" href="{% url 'dishsales' %}">
+
+
